@@ -1,16 +1,22 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
+import { timeout } from 'rxjs';
 import { OrderDto } from './dto/order.dto';
 
 @Injectable()
 export class OrdersService {
   constructor(@Inject('ORDERS_SERVICE') private rabbitClient: ClientProxy) {}
 
-  async placeOrder(order: OrderDto) {
+  placeOrder(order: OrderDto) {
     this.rabbitClient.emit('order-placed', order);
-
     return {
       message: 'Order placed',
     };
+  }
+
+  getOrders() {
+    return this.rabbitClient
+      .send({ cmd: 'fetch-orders' }, {})
+      .pipe(timeout(5000));
   }
 }
