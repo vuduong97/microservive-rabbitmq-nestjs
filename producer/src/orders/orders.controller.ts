@@ -9,7 +9,7 @@ export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
   @Post()
-  placeOrder(@Body() order: OrderDto) {
-    return this.ordersService.placeOrder(order);
+  async placeOrder(@Body() order: OrderDto) {
+    return await this.ordersService.placeOrder(order);
   }
 }

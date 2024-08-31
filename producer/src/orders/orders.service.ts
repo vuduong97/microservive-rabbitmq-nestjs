@@ -4,11 +4,9 @@ import { OrderDto } from './dto/order.dto';
 
 @Injectable()
 export class OrdersService {
-  constructor(
-    @Inject('ORDERS_SERVICE') private readonly rabbitClient: ClientProxy,
-  ) {}
+  constructor(@Inject('ORDERS_SERVICE') private rabbitClient: ClientProxy) {}
 
-  placeOrder(order: OrderDto) {
+  async placeOrder(order: OrderDto) {
     this.rabbitClient.emit('order-placed', order);
 
     return {
